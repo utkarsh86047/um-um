@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Diwali Surprise ✨</title>
+    <title>Special Mission: Sagun Tiwari 🪔</title>
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background: linear-gradient(135deg, #1a0033, #2e0854, #0f0c29);
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -23,127 +23,134 @@
             position: relative;
         }
 
-        /* Sparkle effect */
-        .sparkle {
+        /* Glowing background particles */
+        .particle {
             position: absolute;
-            width: 6px;
-            height: 6px;
-            background: #ffd700;
+            width: 8px;
+            height: 8px;
+            background: #ffeb3b;
             border-radius: 50%;
-            animation: floatSparkle 3s infinite linear;
+            animation: floatUp 4s infinite linear;
             pointer-events: none;
+            box-shadow: 0 0 10px #ff9800;
         }
 
-        @keyframes floatSparkle {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+        @keyframes floatUp {
+            0% { transform: translateY(105vh) scale(0.2); opacity: 0; }
             50% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
 
         .container {
             width: 90%;
-            max-width: 420px;
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 30px;
+            max-width: 440px;
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 28px;
+            padding: 35px 25px;
             text-align: center;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
             z-index: 10;
-            transition: all 0.5s ease;
+            transition: all 0.4s ease;
         }
 
         .card-header {
-            font-size: 14px;
+            font-size: 13px;
             color: #ffca28;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            letter-spacing: 2.5px;
+            margin-bottom: 12px;
+            font-weight: 800;
         }
 
         h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
+            font-size: 22px;
+            margin-bottom: 18px;
             line-height: 1.4;
+            color: #fff;
+        }
+
+        .highlight-name {
+            color: #ff9800;
+            font-size: 26px;
+            display: block;
+            margin-top: 5px;
+            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
         }
 
         p {
-            font-size: 17px;
-            line-height: 1.6;
+            font-size: 16px;
+            line-height: 1.7;
             color: #e0e0e0;
             margin-bottom: 30px;
-            min-height: 90px;
+            min-height: 110px;
         }
 
         .btn {
-            background: linear-gradient(135deg, #ff9800, #ff5722);
+            background: linear-gradient(135deg, #ff9800, #ff3d00);
             color: white;
             border: none;
-            padding: 12px 28px;
+            padding: 14px 30px;
             font-size: 16px;
             font-weight: bold;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 87, 34, 0.4);
-            transition: transform 0.2s, background 0.2s;
+            box-shadow: 0 10px 25px rgba(255, 61, 0, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .btn:active {
-            transform: scale(0.95);
+            transform: scale(0.94);
         }
 
         .progress-dots {
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
 
         .dot {
             width: 8px;
             height: 8px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: background 0.3s;
+            background: rgba(255, 255, 255, 0.25);
+            transition: all 0.3s;
         }
 
         .dot.active {
             background: #ffca28;
-            width: 20px;
+            width: 22px;
             border-radius: 4px;
         }
 
         .roast-box {
-            font-size: 26px;
+            font-size: 25px;
             color: #ff5252;
-            font-weight: 850;
-            text-shadow: 0 0 15px rgba(255, 82, 82, 0.6);
-            animation: bounce 0.6s infinite alternate;
+            font-weight: 900;
+            text-shadow: 0 0 20px rgba(255, 82, 82, 0.7);
+            animation: pulseGlow 0.8s infinite alternate;
+            line-height: 1.5;
         }
 
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-8px); }
-        }
-
-        .hidden {
-            display: none;
+        @keyframes pulseGlow {
+            from { transform: scale(1); filter: brightness(1); }
+            to { transform: scale(1.05); filter: brightness(1.2); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Background Sparkles Container -->
-    <div id="sparkles-container"></div>
+    <!-- Background Sparkles -->
+    <div id="particle-container"></div>
 
     <div class="container" id="app-card">
-        <div class="card-header" id="card-tag">Special Delivery 🪔</div>
-        <h1 id="card-title">Utkarsh Mishra ne aapke liye kuch khas bheja hai! ✨</h1>
-        <p id="card-content">Tap karke dekho andar kya hai... 😉</p>
+        <div class="card-header" id="card-tag">TOP SECRET TRANSMISSION 🪔</div>
+        <h1 id="card-title">Utkarsh Mishra ne kuch bheja hai <span class="highlight-name">Sagun Tiwari</span> ke liye! ✨</h1>
+        <p id="card-content">Zra screen par tap karke dekho andar kya raaz chhupe hain... 😉</p>
         
-        <button class="btn" id="action-btn" onclick="nextStep()">Surprise Dekho 🎁</button>
+        <button class="btn" id="action-btn" onclick="nextStep()">Kholo Isko 🎁</button>
         
         <div class="progress-dots" id="dots-container">
             <div class="dot active"></div>
@@ -155,47 +162,47 @@
     </div>
 
     <script>
-        // Generate floating background sparkles
-        const sContainer = document.getElementById('sparkles-container');
-        for(let i=0; i<25; i++) {
-            const sp = document.createElement('div');
-            sp.className = 'sparkle';
-            sp.style.left = Math.random() * 100 + 'vw';
-            sp.style.animationDuration = (2 + Math.random() * 3) + 's';
-            sp.style.animationDelay = (Math.random() * 3) + 's';
-            sContainer.appendChild(sp);
+        // Floating background particles generator
+        const pContainer = document.getElementById('particle-container');
+        for(let i=0; i<30; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (3 + Math.random() * 3) + 's';
+            p.style.animationDelay = (Math.random() * 3) + 's';
+            pContainer.appendChild(p);
         }
 
         const steps = [
             {
-                tag: "Utkarsh Mishra ki taraf se 🪔",
-                title: "Aapke Liye Pyari Si Wish...",
-                text: "Deepo ki light, mithaiyo ki sweet-ness,<br>Diwali ka ye pyara sa festival happiness...<br>Hamesha muskurati raho tum bina kisi reason,<br>Happy Diwali to the sweetest person! ✨🎆",
+                tag: "DIWALI SPECIAL VIBES 🪔",
+                title: "Shuruat Pyari Baaton Se...",
+                text: "Deepo ki roshni aur mithaiyon ki mithas,<br>Tiwari ji, aapke aane se ban jati hai khas!<br>Hamesha aise hi muskurao aur chamakti raho,<br>Happy Diwali! ✨🎆",
                 btn: "Aage Badho 👉"
             },
             {
-                tag: "Dosti & Vibes ✨",
+                tag: "DOSTI & NAHKRE ✨",
                 title: "Thodi Si Taarif...",
-                text: "Har din tumhari life me nayi roshni aaye,<br>Jo chaaho tum, wo sab khushiyan mil jaye...<br>Dosti ka ye bond hamesha aise hi chamke,<br>Diwali par tumhara har sapna poora ho jaye! 🪔",
-                btn: "Next Dekho 🎯"
+                text: "Life me chahe jitne bhi ho nakhre aur tension,<br>Apni dosti ka level hai ekdum top-notch dimension!<br>Dua hai ki is Diwali aapke saare sapne poore ho jaye,<br>Aur bank balance bina mange double ho jaye! 💰",
+                btn: "Agla Card Dekho 🎯"
             },
             {
-                tag: "Ek Chota Sa Favour 📝",
-                title: "Real Talk...",
-                text: "Roshni se saja hai poora aangan aur ghar,<br>Dua hai ki tum par kabhi na aaye koi fikar...<br>Itni pyari wish ke badle me bas ek favor kar dena,<br>Waqt mile toh mere thode se <b>diagrams bana dena</b>! 🎨",
-                btn: "Aakhri Step 🚀"
+                tag: "EK CHOTA SA FAVOR 📝",
+                title: "Asli Matlab Ab Aayega...",
+                text: "Tyohar ka mausam hai, sab khush hain apne ghar,<br>Tiwari ji, ek choti si help chahiye agar ho sake agar...<br>Badle me itni pyari wish de raha hoon, toh maan lena,<br>Waqt nikal kar mere thode se <b>diagrams bana dena</b>! 🎨",
+                btn: "Last Step Bachha Hai 🚀"
             },
             {
                 tag: "⚠️ WARNING ⚠️",
-                title: "The Climax Moment!",
-                text: "Ab aakhri button dabane se pehle dil tham lena,<br>Kyunki sachai bahar aane wali hai... Ready ho?",
-                btn: "Final Surprise 💥"
+                title: "Khatra Zone!",
+                text: "Dekho Tiwari ji, aakhri button dabane ke baad piche hatne ka koi option nahi milega... Sachai dekhne ke liye ready ho ya darr lag raha hai? 🧐",
+                btn: "Final Dhamaka 💥"
             },
             {
-                tag: "THE ROAST 🤪",
+                tag: "THE ULTIMATE ROAST 🤪",
                 title: "",
                 text: "<div class='roast-box'>Bas kar bauni!<br>Kitna khushi ho rahi hai dekh dekh ke! 😜🔥</div>",
-                btn: "Wapas Shuru Karo 🔄"
+                btn: "Dobara Mazaa Lo 🔄"
             }
         ];
 
@@ -204,7 +211,7 @@
         function nextStep() {
             currentStep++;
             if (currentStep >= steps.length) {
-                currentStep = 0; // Loop back or reset
+                currentStep = 0; 
             }
 
             const data = steps[currentStep];
@@ -213,7 +220,7 @@
             document.getElementById('card-content').innerHTML = data.text;
             document.getElementById('action-btn').innerHTML = data.btn;
 
-            // Update dots
+            // Dots tracker update
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, index) => {
                 if(index === currentStep) {
@@ -223,7 +230,7 @@
                 }
             });
 
-            // Hide dots on final roast screen for cleaner look
+            // Hide dots on final roast screen
             if(currentStep === 4) {
                 document.getElementById('dots-container').style.display = 'none';
             } else {
