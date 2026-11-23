@@ -1,242 +1,481 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Mission: Sagun Tiwari 🪔</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AURA AI - Personal Voice System</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-        body {
-            background: linear-gradient(135deg, #1a0033, #2e0854, #0f0c29);
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
+    body {
+      background: radial-gradient(circle at center, #0a192f 0%, #020617 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+      overflow-x: hidden;
+    }
 
-        /* Glowing background particles */
-        .particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: #ffeb3b;
-            border-radius: 50%;
-            animation: floatUp 4s infinite linear;
-            pointer-events: none;
-            box-shadow: 0 0 10px #ff9800;
-        }
+    /* Top Header */
+    .header {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+      padding-bottom: 10px;
+    }
 
-        @keyframes floatUp {
-            0% { transform: translateY(105vh) scale(0.2); opacity: 0; }
-            50% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
-        }
+    .status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: #38bdf8;
+      text-transform: uppercase;
+    }
 
-        .container {
-            width: 90%;
-            max-width: 440px;
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(18px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 28px;
-            padding: 35px 25px;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
-            z-index: 10;
-            transition: all 0.4s ease;
-        }
+    .dot {
+      width: 8px;
+      height: 8px;
+      background: #22c55e;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #22c55e;
+      animation: blink 1.5s infinite;
+    }
 
-        .card-header {
-            font-size: 13px;
-            color: #ffca28;
-            text-transform: uppercase;
-            letter-spacing: 2.5px;
-            margin-bottom: 12px;
-            font-weight: 800;
-        }
+    .settings-btn {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #38bdf8;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-        h1 {
-            font-size: 22px;
-            margin-bottom: 18px;
-            line-height: 1.4;
-            color: #fff;
-        }
+    /* AI Orb Animation Container */
+    .orb-container {
+      position: relative;
+      width: 220px;
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px 0;
+      cursor: pointer;
+    }
 
-        .highlight-name {
-            color: #ff9800;
-            font-size: 26px;
-            display: block;
-            margin-top: 5px;
-            text-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
-        }
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      transition: all 0.3s ease;
+    }
 
-        p {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #e0e0e0;
-            margin-bottom: 30px;
-            min-height: 110px;
-        }
+    .ring-1 {
+      width: 210px;
+      height: 210px;
+      border-top: 2px solid #38bdf8;
+      border-bottom: 2px solid #38bdf8;
+      animation: spin 8s linear infinite;
+    }
 
-        .btn {
-            background: linear-gradient(135deg, #ff9800, #ff3d00);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 61, 0, 0.4);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
+    .ring-2 {
+      width: 175px;
+      height: 175px;
+      border-left: 2px solid #818cf8;
+      border-right: 2px solid #818cf8;
+      animation: spinReverse 5s linear infinite;
+    }
 
-        .btn:active {
-            transform: scale(0.94);
-        }
+    .ring-3 {
+      width: 140px;
+      height: 140px;
+      border: 1px dashed rgba(56, 189, 248, 0.6);
+      animation: spin 12s linear infinite;
+    }
 
-        .progress-dots {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 25px;
-        }
+    .core {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
+      box-shadow: 0 0 30px rgba(56, 189, 248, 0.6), inset 0 0 20px #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: breathe 3s ease-in-out infinite;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.25);
-            transition: all 0.3s;
-        }
+    /* Active Speaking State */
+    .orb-container.speaking .core {
+      animation: pulseSpeak 0.35s ease-in-out infinite alternate;
+      box-shadow: 0 0 55px #38bdf8, 0 0 90px #818cf8, inset 0 0 25px #fff;
+    }
 
-        .dot.active {
-            background: #ffca28;
-            width: 22px;
-            border-radius: 4px;
-        }
+    .orb-container.speaking .ring-1 {
+      animation: spin 1.8s linear infinite;
+      border-color: #22d3ee transparent;
+    }
 
-        .roast-box {
-            font-size: 25px;
-            color: #ff5252;
-            font-weight: 900;
-            text-shadow: 0 0 20px rgba(255, 82, 82, 0.7);
-            animation: pulseGlow 0.8s infinite alternate;
-            line-height: 1.5;
-        }
+    .orb-container.speaking .ring-2 {
+      animation: spinReverse 1.2s linear infinite;
+      border-color: transparent #a855f7;
+    }
 
-        @keyframes pulseGlow {
-            from { transform: scale(1); filter: brightness(1); }
-            to { transform: scale(1.05); filter: brightness(1.2); }
-        }
-    </style>
+    /* Equalizer Bars */
+    .equalizer {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 30px;
+    }
+
+    .bar {
+      width: 4px;
+      height: 6px;
+      background: #ffffff;
+      border-radius: 2px;
+      transition: height 0.1s ease;
+    }
+
+    .orb-container.speaking .bar:nth-child(1) { animation: eq 0.4s infinite alternate 0.1s; }
+    .orb-container.speaking .bar:nth-child(2) { animation: eq 0.3s infinite alternate 0.3s; }
+    .orb-container.speaking .bar:nth-child(3) { animation: eq 0.5s infinite alternate 0.0s; }
+    .orb-container.speaking .bar:nth-child(4) { animation: eq 0.35s infinite alternate 0.2s; }
+    .orb-container.speaking .bar:nth-child(5) { animation: eq 0.45s infinite alternate 0.4s; }
+
+    /* Subtitle / Output Box */
+    .subtitle-box {
+      width: 100%;
+      max-width: 500px;
+      min-height: 85px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 14px;
+      padding: 15px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      line-height: 1.5;
+      color: #f8fafc;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      margin-bottom: 18px;
+    }
+
+    /* Command Buttons */
+    .controls {
+      width: 100%;
+      max-width: 500px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .cmd-btn {
+      background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15));
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: #e0f2fe;
+      padding: 12px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .cmd-btn:hover, .cmd-btn:active {
+      background: rgba(56, 189, 248, 0.3);
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    /* Live Custom Input */
+    .custom-input-area {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .custom-input-area input {
+      flex: 1;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      border-radius: 10px;
+      padding: 12px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .speak-now-btn {
+      background: #0284c7;
+      border: none;
+      color: #fff;
+      padding: 0 18px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Modal for Name Setup */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.85);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: #0f172a;
+      border: 1px solid #38bdf8;
+      border-radius: 14px;
+      padding: 20px;
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 12px;
+      color: #38bdf8;
+    }
+
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      background: #1e293b;
+      color: #fff;
+      margin-bottom: 14px;
+      font-size: 15px;
+    }
+
+    .modal-content button {
+      background: #0284c7;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes spinReverse {
+      100% { transform: rotate(-360deg); }
+    }
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.06); }
+    }
+    @keyframes pulseSpeak {
+      0% { transform: scale(0.96); }
+      100% { transform: scale(1.14); }
+    }
+    @keyframes eq {
+      0% { height: 6px; }
+      100% { height: 26px; }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Background Sparkles -->
-    <div id="particle-container"></div>
-
-    <div class="container" id="app-card">
-        <div class="card-header" id="card-tag">SPECIAL DELIVERY 🪔</div>
-        <h1 id="card-title">Utkarsh Mishra ne kuch bheja hai <span class="highlight-name">Sagun Tiwari</span> ke liye! ✨</h1>
-        <p id="card-content">Zra screen par tap karke dekho andar kya raaz chhupe hain... 😉</p>
-        
-        <button class="btn" id="action-btn" onclick="nextStep()">Kholo Isko 🎁</button>
-        
-        <div class="progress-dots" id="dots-container">
-            <div class="dot active"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        </div>
+  <!-- Header -->
+  <div class="header">
+    <div class="status-badge">
+      <div class="dot"></div>
+      <span>AURA AI • ONLINE</span>
     </div>
+    <button class="settings-btn" onclick="openModal()">⚙️ Name Set</button>
+  </div>
 
-    <script>
-        // Floating background particles generator
-        const pContainer = document.getElementById('particle-container');
-        for(let i=0; i<30; i++) {
-            const p = document.createElement('div');
-            p.className = 'particle';
-            p.style.left = Math.random() * 100 + 'vw';
-            p.style.animationDuration = (3 + Math.random() * 3) + 's';
-            p.style.animationDelay = (Math.random() * 3) + 's';
-            pContainer.appendChild(p);
+  <!-- Central AI Orb -->
+  <div class="orb-container" id="orb" onclick="triggerAction('intro')">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="core">
+      <div class="equalizer">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Subtitle Display -->
+  <div class="subtitle-box" id="subtitle">
+    [ Orb par touch karein ya neeche koi command chunein ]
+  </div>
+
+  <!-- Preset Buttons -->
+  <div class="controls">
+    <button class="cmd-btn" onclick="triggerAction('intro')">👋 AI Introduction</button>
+    <button class="cmd-btn" onclick="triggerAction('compliment')">✨ Special Tareef</button>
+    <button class="cmd-btn" onclick="triggerAction('shayari')">💫 Filmi Andaz</button>
+    <button class="cmd-btn" onclick="triggerAction('secret')">🔐 Secret Message</button>
+  </div>
+
+  <!-- Live Custom Input -->
+  <div class="custom-input-area">
+    <input type="text" id="customText" placeholder="Yahan kuch likhein jo AI bolega..." />
+    <button class="speak-now-btn" onclick="speakCustom()">Bolkar Sunao</button>
+  </div>
+
+  <!-- Name Settings Modal -->
+  <div class="modal" id="nameModal">
+    <div class="modal-content">
+      <h3>Target Name Set Karein</h3>
+      <input type="text" id="targetNameInput" placeholder="Naam likhein..." value="Sagun" />
+      <button onclick="saveName()">Save & Activate</button>
+    </div>
+  </div>
+
+  <script>
+    let targetName = localStorage.getItem('ai_target_name') || 'Sagun';
+    document.getElementById('targetNameInput').value = targetName;
+
+    const orb = document.getElementById('orb');
+    const subtitle = document.getElementById('subtitle');
+    let typingInterval;
+
+    // Futuristic Beep Sound Generator (No external file needed)
+    function playSciFiBeep() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(980, audioCtx.currentTime + 0.12);
+        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.15);
+      } catch (e) {}
+    }
+
+    // Typewriter Effect on Screen
+    function typeText(text) {
+      clearInterval(typingInterval);
+      subtitle.textContent = '';
+      let i = 0;
+      typingInterval = setInterval(() => {
+        if (i < text.length) {
+          subtitle.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(typingInterval);
         }
+      }, 38);
+    }
 
-        const steps = [
-            {
-                tag: "DIWALI SPECIAL VIBES 🪔",
-                title: "A Very Special Wish ✨",
-                text: "Deepo ki roshni aur mithaiyon ki mithas,<br>Tiwari ji, aapke aane se ban jati hai khas!<br>Hamesha aise hi muskurao aur chamakti raho,<br>Happy Diwali! ✨🎆",
-                btn: "Aage Badho 👉"
-            },
-            {
-                tag: "DOSTI & VIBES ✨",
-                title: "Dosti Ki Sparkle 💫",
-                text: "Life me chahe jitne bhi ho nakhre aur tension,<br>Apni dosti ka level hai ekdum top-notch dimension!<br>Dua hai ki is Diwali aapke saare sapne poore ho jaye,<br>Aur bank balance bina mange double ho jaye! 💰",
-                btn: "Agla Card Dekho 🎯"
-            },
-            {
-                tag: "FESTIVE FAVOUR 📝",
-                title: "A Small Festive Favor 🎁",
-                text: "Tyohar ka mausam hai, sab khush hain apne ghar,<br>Tiwari ji, ek choti si help chahiye agar ho sake agar...<br>Badle me itni pyari wish de raha hoon, toh maan lena,<br>Waqt nikal kar mere thode se <b>diagrams bana dena</b>! 🎨",
-                btn: "Last Step Bachha Hai 🚀"
-            },
-            {
-                tag: "ALMOST THERE 🎇",
-                title: "One Last Wish For You 🎆",
-                text: "Dekho Tiwari ji, aakhri step par aate-aate saari best wishes de di hain... ab bas ek aakhri pyari si cheez bachi hai dekhne ke liye! 🌟",
-                btn: "Final Dhamaka 💥"
-            },
-            {
-                tag: "THE ULTIMATE ROAST 🤪",
-                title: "",
-                text: "<div class='roast-box'>Bas kar bauni!<br>Kitna khush ho rahi hai dekh dekh ke! 😜🔥</div>",
-                btn: "Dobara Mazaa Lo 🔄"
-            }
-        ];
+    // Hindi Speech Engine
+    function speakHindi(text) {
+      window.speechSynthesis.cancel();
+      playSciFiBeep();
+      typeText(text);
 
-        let currentStep = 0;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'hi-IN';
+      utterance.rate = 0.95; // Natural speed
+      utterance.pitch = 1.05;
 
-        function nextStep() {
-            currentStep++;
-            if (currentStep >= steps.length) {
-                currentStep = 0; 
-            }
+      // Try selecting the best Hindi voice available on the device
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.lang.includes('hi'));
+      if (hindiVoice) {
+        utterance.voice = hindiVoice;
+      }
 
-            const data = steps[currentStep];
-            document.getElementById('card-tag').innerHTML = data.tag;
-            document.getElementById('card-title').innerHTML = data.title;
-            document.getElementById('card-content').innerHTML = data.text;
-            document.getElementById('action-btn').innerHTML = data.btn;
+      utterance.onstart = () => {
+        orb.classList.add('speaking');
+      };
 
-            // Dots tracker update
-            const dots = document.querySelectorAll('.dot');
-            dots.forEach((dot, index) => {
-                if(index === currentStep) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
+      utterance.onend = () => {
+        orb.classList.remove('speaking');
+      };
 
-            // Hide dots on final roast screen
-            if(currentStep === 4) {
-                document.getElementById('dots-container').style.display = 'none';
-            } else {
-                document.getElementById('dots-container').style.display = 'flex';
-            }
-        }
-    </script>
+      utterance.onerror = () => {
+        orb.classList.remove('speaking');
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    // Preset Dialogues
+    function triggerAction(type) {
+      const scripts = {
+        intro: `Hello ${targetName}, main Aura AI hoon. Mujhe Utkarsh ne khas taur par aapke liye design kiya hai. System online hai, bataiye main aapki kya madad kar sakta hoon?`,
+        compliment: `${targetName}, mere data analysis ke hisaab se aapki smile aur aapka andaaz kaafi unique hai. Aap jab muskurati hain toh poora mahaul positive ho jaata hai.`,
+        shayari: `Suniye ${targetName}... hazaron chehron mein ek alag si baat hoti hai, kuch logon ki muskurahat hi sabse khaas hoti hai.`,
+        secret: `${targetName}, ek secret bataun? Utkarsh ne yeh poora system sirf isliye banaya hai taaki aapke chehre par ek chhoti si smile aa sake.`
+      };
+
+      speakHindi(scripts[type]);
+    }
+
+    function speakCustom() {
+      const input = document.getElementById('customText');
+      const text = input.value.trim();
+      if (text) {
+        speakHindi(text);
+        input.value = '';
+      }
+    }
+
+    // Modal Functions
+    function openModal() {
+      document.getElementById('nameModal').style.display = 'flex';
+    }
+
+    function saveName() {
+      const val = document.getElementById('targetNameInput').value.trim();
+      if (val) {
+        targetName = val;
+        localStorage.setItem('ai_target_name', targetName);
+      }
+      document.getElementById('nameModal').style.display = 'none';
+      triggerAction('intro');
+    }
+
+    // Load voices properly on mobile Chrome
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
+  </script>
 </body>
 </html>
