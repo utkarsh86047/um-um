@@ -67,12 +67,12 @@
     /* AI Orb Animation Container */
     .orb-container {
       position: relative;
-      width: 170px;
-      height: 170px;
+      width: 160px;
+      height: 160px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 14px 0;
+      margin: 12px 0;
       cursor: pointer;
     }
 
@@ -84,31 +84,31 @@
     }
 
     .ring-1 {
-      width: 165px;
-      height: 165px;
+      width: 155px;
+      height: 155px;
       border-top: 2px solid #38bdf8;
       border-bottom: 2px solid #38bdf8;
       animation: spin 8s linear infinite;
     }
 
     .ring-2 {
-      width: 135px;
-      height: 135px;
+      width: 126px;
+      height: 126px;
       border-left: 2px solid #818cf8;
       border-right: 2px solid #818cf8;
       animation: spinReverse 5s linear infinite;
     }
 
     .ring-3 {
-      width: 108px;
-      height: 108px;
+      width: 100px;
+      height: 100px;
       border: 1px dashed rgba(56, 189, 248, 0.6);
       animation: spin 12s linear infinite;
     }
 
     .core {
-      width: 80px;
-      height: 80px;
+      width: 74px;
+      height: 74px;
       border-radius: 50%;
       background: radial-gradient(circle, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
       box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px #ffffff;
@@ -118,7 +118,6 @@
       animation: breathe 3s ease-in-out infinite;
     }
 
-    /* Active Speaking State */
     .orb-container.speaking .core {
       animation: pulseSpeak 0.35s ease-in-out infinite alternate;
       box-shadow: 0 0 45px #38bdf8, 0 0 80px #818cf8, inset 0 0 20px #fff;
@@ -134,12 +133,18 @@
       border-color: transparent #a855f7;
     }
 
+    .orb-container.listening .core {
+      background: radial-gradient(circle, #ef4444 0%, #b91c1c 80%);
+      box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
+      animation: pulseSpeak 0.5s ease-in-out infinite alternate;
+    }
+
     /* Equalizer Bars */
     .equalizer {
       display: flex;
       align-items: center;
       gap: 4px;
-      height: 26px;
+      height: 24px;
     }
 
     .bar {
@@ -159,7 +164,7 @@
     .status-line {
       font-size: 13px;
       color: #7dd3fc;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       min-height: 20px;
       text-align: center;
     }
@@ -171,22 +176,18 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .preset-btn {
       background: rgba(14, 165, 233, 0.15);
       border: 1px solid rgba(56, 189, 248, 0.35);
       color: #e0f2fe;
-      padding: 9px 6px;
+      padding: 8px 6px;
       border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-    }
-
-    .preset-btn:active {
-      background: rgba(56, 189, 248, 0.35);
     }
 
     /* Study Reader Card */
@@ -204,16 +205,40 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       margin-bottom: 8px;
       font-size: 13px;
       color: #94a3b8;
+    }
+
+    .top-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .mic-btn {
+      background: rgba(16, 185, 129, 0.18);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #6ee7b7;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .mic-btn.recording {
+      background: rgba(239, 68, 68, 0.25);
+      border-color: #ef4444;
+      color: #fca5a5;
+      animation: blink 1s infinite;
     }
 
     .clear-btn {
       background: transparent;
       border: 1px solid rgba(248, 113, 113, 0.4);
       color: #fca5a5;
-      padding: 3px 8px;
+      padding: 4px 8px;
       border-radius: 6px;
       font-size: 11px;
       cursor: pointer;
@@ -221,7 +246,7 @@
 
     textarea {
       width: 100%;
-      height: 150px;
+      height: 145px;
       background: #020617;
       border: 1px solid rgba(56, 189, 248, 0.3);
       border-radius: 10px;
@@ -404,7 +429,7 @@
     </div>
   </div>
 
-  <div class="status-line" id="statusText">Ready • Orb par touch karein ya neeche notes paste karein</div>
+  <div class="status-line" id="statusText">Ready • Bolkar likhein, paste karein ya orb touch karein</div>
 
   <!-- Quick Fun / Intro Presets -->
   <div class="quick-presets">
@@ -416,11 +441,14 @@
   <!-- Audio Study Reader Card -->
   <div class="study-card">
     <div class="card-top">
-      <span>📖 Yaad karne wala topic yahan likhein / paste karein:</span>
-      <button class="clear-btn" onclick="clearNotes()">Clear</button>
+      <span>📖 Topic bolein ya paste karein:</span>
+      <div class="top-actions">
+        <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Bolkar Likho</button>
+        <button class="clear-btn" onclick="clearNotes()">Clear</button>
+      </div>
     </div>
 
-    <textarea id="studyNotes" placeholder="Apne notes, question-answer ya koi bhi topic yahan paste karein... AI aapko bolkar sunayega!"></textarea>
+    <textarea id="studyNotes" placeholder="Bolkar likhne ke liye 'Bolkar Likho' dabayein, ya apne notes paste karein..."></textarea>
 
     <!-- Speed & Loop Options -->
     <div class="options-bar">
@@ -458,10 +486,12 @@
     const orb = document.getElementById('orb');
     const statusText = document.getElementById('statusText');
     const loopBtn = document.getElementById('loopBtn');
+    const micBtn = document.getElementById('micBtn');
 
     let speechRate = 0.95;
     let isLooping = false;
     let isPaused = false;
+    let isListening = false;
     let currentText = '';
 
     // Load saved notes automatically
@@ -469,6 +499,65 @@
     notesArea.addEventListener('input', () => {
       localStorage.setItem('saved_study_notes', notesArea.value);
     });
+
+    // Speech-to-Text Setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition = null;
+
+    if (SpeechRecognition) {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'hi-IN';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        isListening = true;
+        window.speechSynthesis.cancel();
+        orb.classList.remove('speaking');
+        orb.classList.add('listening');
+        micBtn.classList.add('recording');
+        micBtn.textContent = '🛑 Sun raha hoon...';
+        statusText.textContent = '🎙️ Aap boliye, main likh aur save kar raha hoon...';
+      };
+
+      recognition.onresult = (event) => {
+        const spokenText = event.results[0][0].transcript.trim();
+        if (spokenText) {
+          const existing = notesArea.value.trim();
+          notesArea.value = existing ? `${existing} ${spokenText}` : spokenText;
+          localStorage.setItem('saved_study_notes', notesArea.value);
+          statusText.textContent = '💾 Save ho gaya! Ab Suno (Play) dabayein ya aur bolein.';
+        }
+      };
+
+      recognition.onerror = (event) => {
+        statusText.textContent = `⚠️ Mic error: ${event.error}. Chrome aur mic permission check karein.`;
+      };
+
+      recognition.onend = () => {
+        isListening = false;
+        orb.classList.remove('listening');
+        micBtn.classList.remove('recording');
+        micBtn.textContent = '🎙️ Bolkar Likho';
+      };
+    }
+
+    function toggleVoiceInput() {
+      if (!recognition) {
+        statusText.textContent = '⚠️ Is browser mein voice typing support nahi hai. Chrome try karein.';
+        return;
+      }
+
+      if (isListening) {
+        recognition.stop();
+      } else {
+        try {
+          recognition.start();
+        } catch (e) {
+          recognition.stop();
+        }
+      }
+    }
 
     function setSpeed(rate, btn) {
       speechRate = rate;
@@ -484,7 +573,7 @@
 
     function speakText(text, allowLoop = false) {
       if (!text.trim()) {
-        statusText.textContent = '⚠️ Pehle box mein kuch text likhein ya paste karein!';
+        statusText.textContent = '⚠️ Pehle bolkar likhein ya box mein kuch paste karein!';
         return;
       }
 
@@ -527,6 +616,9 @@
     }
 
     function startReading() {
+      if (isListening && recognition) {
+        recognition.stop();
+      }
       if (window.speechSynthesis.paused && isPaused) {
         window.speechSynthesis.resume();
         isPaused = false;
@@ -552,6 +644,9 @@
     }
 
     function stopReading() {
+      if (isListening && recognition) {
+        recognition.stop();
+      }
       isLooping = false;
       loopBtn.textContent = '🔁 Loop: OFF';
       loopBtn.classList.remove('active');
@@ -563,7 +658,7 @@
 
     function playPreset(type) {
       const presets = {
-        intro: `Hello ${targetName}, main aapka personal study AI hoon. Aap apne notes neeche box mein paste kijiye, main unhe bolkar sunaunga taaki aapko bina thake sab yaad ho jaye.`,
+        intro: `Hello ${targetName}, main aapka personal study AI hoon. Aap bolkar apna topic likhwa sakti hain ya neeche paste kar sakti hain, main use bolkar sunaunga.`,
         motivate: `${targetName}, bas thoda sa focus aur lagataar revision—aap koi bhi topic aasani se yaad kar sakti hain. Chaliye shuru karte hain!`,
         compliment: `${targetName}, aapki mehnat aur dedication sach mein kamaal ki hai. Aap jab muskurati hain toh sab kuch aasan lagne lagta hai.`
       };
