@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURA AI - Personal Voice System</title>
+  <title>AURA AI - Smart Voice & Study Assistant</title>
   <style>
     * {
       margin: 0;
@@ -19,15 +19,14 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: space-between;
-      padding: 20px;
+      padding: 16px;
       overflow-x: hidden;
     }
 
     /* Top Header */
     .header {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -43,6 +42,7 @@
       letter-spacing: 1.5px;
       color: #38bdf8;
       text-transform: uppercase;
+      font-weight: 600;
     }
 
     .dot {
@@ -58,21 +58,21 @@
       background: rgba(56, 189, 248, 0.1);
       border: 1px solid rgba(56, 189, 248, 0.4);
       color: #38bdf8;
-      padding: 6px 10px;
+      padding: 6px 12px;
       border-radius: 8px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 13px;
     }
 
     /* AI Orb Animation Container */
     .orb-container {
       position: relative;
-      width: 220px;
-      height: 220px;
+      width: 170px;
+      height: 170px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 20px 0;
+      margin: 14px 0;
       cursor: pointer;
     }
 
@@ -84,45 +84,44 @@
     }
 
     .ring-1 {
-      width: 210px;
-      height: 210px;
+      width: 165px;
+      height: 165px;
       border-top: 2px solid #38bdf8;
       border-bottom: 2px solid #38bdf8;
       animation: spin 8s linear infinite;
     }
 
     .ring-2 {
-      width: 175px;
-      height: 175px;
+      width: 135px;
+      height: 135px;
       border-left: 2px solid #818cf8;
       border-right: 2px solid #818cf8;
       animation: spinReverse 5s linear infinite;
     }
 
     .ring-3 {
-      width: 140px;
-      height: 140px;
+      width: 108px;
+      height: 108px;
       border: 1px dashed rgba(56, 189, 248, 0.6);
       animation: spin 12s linear infinite;
     }
 
     .core {
-      width: 100px;
-      height: 100px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: radial-gradient(circle, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.6), inset 0 0 20px #ffffff;
+      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px #ffffff;
       display: flex;
       align-items: center;
       justify-content: center;
       animation: breathe 3s ease-in-out infinite;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     /* Active Speaking State */
     .orb-container.speaking .core {
       animation: pulseSpeak 0.35s ease-in-out infinite alternate;
-      box-shadow: 0 0 55px #38bdf8, 0 0 90px #818cf8, inset 0 0 25px #fff;
+      box-shadow: 0 0 45px #38bdf8, 0 0 80px #818cf8, inset 0 0 20px #fff;
     }
 
     .orb-container.speaking .ring-1 {
@@ -140,7 +139,7 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      height: 30px;
+      height: 26px;
     }
 
     .bar {
@@ -148,7 +147,6 @@
       height: 6px;
       background: #ffffff;
       border-radius: 2px;
-      transition: height 0.1s ease;
     }
 
     .orb-container.speaking .bar:nth-child(1) { animation: eq 0.4s infinite alternate 0.1s; }
@@ -157,84 +155,172 @@
     .orb-container.speaking .bar:nth-child(4) { animation: eq 0.35s infinite alternate 0.2s; }
     .orb-container.speaking .bar:nth-child(5) { animation: eq 0.45s infinite alternate 0.4s; }
 
-    /* Subtitle / Output Box */
-    .subtitle-box {
-      width: 100%;
-      max-width: 500px;
-      min-height: 85px;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 14px;
-      padding: 15px;
+    /* Live Status Text */
+    .status-line {
+      font-size: 13px;
+      color: #7dd3fc;
+      margin-bottom: 12px;
+      min-height: 20px;
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      line-height: 1.5;
-      color: #f8fafc;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      margin-bottom: 18px;
     }
 
-    /* Command Buttons */
-    .controls {
+    /* Quick Preset Buttons */
+    .quick-presets {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
-    .cmd-btn {
-      background: linear-gradient(135deg, rgba(14, 165, 233, 0.15), rgba(99, 102, 241, 0.15));
-      border: 1px solid rgba(56, 189, 248, 0.4);
+    .preset-btn {
+      background: rgba(14, 165, 233, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.35);
       color: #e0f2fe;
-      padding: 12px 10px;
-      border-radius: 10px;
-      font-size: 14px;
+      padding: 9px 6px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
     }
 
-    .cmd-btn:hover, .cmd-btn:active {
-      background: rgba(56, 189, 248, 0.3);
-      transform: translateY(-2px);
-      box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    .preset-btn:active {
+      background: rgba(56, 189, 248, 0.35);
     }
 
-    /* Live Custom Input */
-    .custom-input-area {
+    /* Study Reader Card */
+    .study-card {
       width: 100%;
-      max-width: 500px;
+      max-width: 520px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .card-top {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .clear-btn {
+      background: transparent;
+      border: 1px solid rgba(248, 113, 113, 0.4);
+      color: #fca5a5;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+      background: #020617;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      border-radius: 10px;
+      padding: 12px;
+      color: #f8fafc;
+      font-size: 15px;
+      line-height: 1.5;
+      resize: vertical;
+      outline: none;
+      margin-bottom: 12px;
+    }
+
+    textarea:focus {
+      border-color: #38bdf8;
+    }
+
+    /* Speed & Loop Bar */
+    .options-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .speed-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #cbd5e1;
+    }
+
+    .speed-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 5px 9px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .speed-btn.active {
+      background: #0284c7;
+      border-color: #38bdf8;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .loop-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .loop-btn.active {
+      background: rgba(34, 197, 94, 0.2);
+      border-color: #22c55e;
+      color: #4ade80;
+      font-weight: bold;
+    }
+
+    /* Main Playback Controls */
+    .playback-controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
       gap: 8px;
     }
 
-    .custom-input-area input {
-      flex: 1;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      border-radius: 10px;
+    .ctrl-btn {
       padding: 12px;
-      color: #fff;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .speak-now-btn {
-      background: #0284c7;
       border: none;
-      color: #fff;
-      padding: 0 18px;
       border-radius: 10px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
+      color: #fff;
     }
 
-    /* Modal for Name Setup */
+    .play-btn {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    }
+
+    .pause-btn {
+      background: #d97706;
+    }
+
+    .stop-btn {
+      background: #dc2626;
+    }
+
+    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -252,7 +338,7 @@
       border-radius: 14px;
       padding: 20px;
       width: 100%;
-      max-width: 360px;
+      max-width: 350px;
       text-align: center;
     }
 
@@ -276,35 +362,19 @@
       background: #0284c7;
       color: #fff;
       border: none;
-      padding: 10px 20px;
+      padding: 10px;
       border-radius: 8px;
       font-weight: bold;
       cursor: pointer;
       width: 100%;
     }
 
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes spinReverse {
-      100% { transform: rotate(-360deg); }
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.06); }
-    }
-    @keyframes pulseSpeak {
-      0% { transform: scale(0.96); }
-      100% { transform: scale(1.14); }
-    }
-    @keyframes eq {
-      0% { height: 6px; }
-      100% { height: 26px; }
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
+    @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    @keyframes pulseSpeak { 0% { transform: scale(0.95); } 100% { transform: scale(1.12); } }
+    @keyframes eq { 0% { height: 6px; } 100% { height: 22px; } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
   </style>
 </head>
 <body>
@@ -313,13 +383,13 @@
   <div class="header">
     <div class="status-badge">
       <div class="dot"></div>
-      <span>AURA AI • ONLINE</span>
+      <span>AURA STUDY AI</span>
     </div>
     <button class="settings-btn" onclick="openModal()">⚙️ Name Set</button>
   </div>
 
-  <!-- Central AI Orb -->
-  <div class="orb-container" id="orb" onclick="triggerAction('intro')">
+  <!-- AI Orb -->
+  <div class="orb-container" id="orb" onclick="playPreset('intro')">
     <div class="ring ring-1"></div>
     <div class="ring ring-2"></div>
     <div class="ring ring-3"></div>
@@ -334,31 +404,49 @@
     </div>
   </div>
 
-  <!-- Subtitle Display -->
-  <div class="subtitle-box" id="subtitle">
-    [ Orb par touch karein ya neeche koi command chunein ]
+  <div class="status-line" id="statusText">Ready • Orb par touch karein ya neeche notes paste karein</div>
+
+  <!-- Quick Fun / Intro Presets -->
+  <div class="quick-presets">
+    <button class="preset-btn" onclick="playPreset('intro')">👋 Intro</button>
+    <button class="preset-btn" onclick="playPreset('motivate')">🔥 Study Boost</button>
+    <button class="preset-btn" onclick="playPreset('compliment')">✨ Special</button>
   </div>
 
-  <!-- Preset Buttons -->
-  <div class="controls">
-    <button class="cmd-btn" onclick="triggerAction('intro')">👋 AI Introduction</button>
-    <button class="cmd-btn" onclick="triggerAction('compliment')">✨ Special Tareef</button>
-    <button class="cmd-btn" onclick="triggerAction('shayari')">💫 Filmi Andaz</button>
-    <button class="cmd-btn" onclick="triggerAction('secret')">🔐 Secret Message</button>
+  <!-- Audio Study Reader Card -->
+  <div class="study-card">
+    <div class="card-top">
+      <span>📖 Yaad karne wala topic yahan likhein / paste karein:</span>
+      <button class="clear-btn" onclick="clearNotes()">Clear</button>
+    </div>
+
+    <textarea id="studyNotes" placeholder="Apne notes, question-answer ya koi bhi topic yahan paste karein... AI aapko bolkar sunayega!"></textarea>
+
+    <!-- Speed & Loop Options -->
+    <div class="options-bar">
+      <div class="speed-group">
+        <span>Speed:</span>
+        <button class="speed-btn" onclick="setSpeed(0.75, this)">0.75x</button>
+        <button class="speed-btn active" onclick="setSpeed(0.95, this)">1x</button>
+        <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+      </div>
+      <button class="loop-btn" id="loopBtn" onclick="toggleLoop()">🔁 Loop: OFF</button>
+    </div>
+
+    <!-- Play / Pause / Stop Buttons -->
+    <div class="playback-controls">
+      <button class="ctrl-btn play-btn" onclick="startReading()">▶️ Suno (Play)</button>
+      <button class="ctrl-btn pause-btn" onclick="togglePause()">⏸️ Pause</button>
+      <button class="ctrl-btn stop-btn" onclick="stopReading()">⏹️ Stop</button>
+    </div>
   </div>
 
-  <!-- Live Custom Input -->
-  <div class="custom-input-area">
-    <input type="text" id="customText" placeholder="Yahan kuch likhein jo AI bolega..." />
-    <button class="speak-now-btn" onclick="speakCustom()">Bolkar Sunao</button>
-  </div>
-
-  <!-- Name Settings Modal -->
+  <!-- Name Modal -->
   <div class="modal" id="nameModal">
     <div class="modal-content">
-      <h3>Target Name Set Karein</h3>
-      <input type="text" id="targetNameInput" placeholder="Naam likhein..." value="Sagun" />
-      <button onclick="saveName()">Save & Activate</button>
+      <h3>Naam Set Karein</h3>
+      <input type="text" id="targetNameInput" value="Sagun" />
+      <button onclick="saveName()">Save</button>
     </div>
   </div>
 
@@ -366,55 +454,49 @@
     let targetName = localStorage.getItem('ai_target_name') || 'Sagun';
     document.getElementById('targetNameInput').value = targetName;
 
+    const notesArea = document.getElementById('studyNotes');
     const orb = document.getElementById('orb');
-    const subtitle = document.getElementById('subtitle');
-    let typingInterval;
+    const statusText = document.getElementById('statusText');
+    const loopBtn = document.getElementById('loopBtn');
 
-    // Futuristic Beep Sound Generator (No external file needed)
-    function playSciFiBeep() {
-      try {
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(520, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(980, audioCtx.currentTime + 0.12);
-        gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.15);
-      } catch (e) {}
+    let speechRate = 0.95;
+    let isLooping = false;
+    let isPaused = false;
+    let currentText = '';
+
+    // Load saved notes automatically
+    notesArea.value = localStorage.getItem('saved_study_notes') || '';
+    notesArea.addEventListener('input', () => {
+      localStorage.setItem('saved_study_notes', notesArea.value);
+    });
+
+    function setSpeed(rate, btn) {
+      speechRate = rate;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
     }
 
-    // Typewriter Effect on Screen
-    function typeText(text) {
-      clearInterval(typingInterval);
-      subtitle.textContent = '';
-      let i = 0;
-      typingInterval = setInterval(() => {
-        if (i < text.length) {
-          subtitle.textContent += text.charAt(i);
-          i++;
-        } else {
-          clearInterval(typingInterval);
-        }
-      }, 38);
+    function toggleLoop() {
+      isLooping = !isLooping;
+      loopBtn.textContent = isLooping ? '🔁 Loop: ON' : '🔁 Loop: OFF';
+      loopBtn.classList.toggle('active', isLooping);
     }
 
-    // Hindi Speech Engine
-    function speakHindi(text) {
+    function speakText(text, allowLoop = false) {
+      if (!text.trim()) {
+        statusText.textContent = '⚠️ Pehle box mein kuch text likhein ya paste karein!';
+        return;
+      }
+
       window.speechSynthesis.cancel();
-      playSciFiBeep();
-      typeText(text);
+      isPaused = false;
+      currentText = text;
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'hi-IN';
-      utterance.rate = 0.95; // Natural speed
-      utterance.pitch = 1.05;
+      utterance.rate = speechRate;
+      utterance.pitch = 1.03;
 
-      // Try selecting the best Hindi voice available on the device
       const voices = window.speechSynthesis.getVoices();
       const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.lang.includes('hi'));
       if (hindiVoice) {
@@ -423,41 +505,78 @@
 
       utterance.onstart = () => {
         orb.classList.add('speaking');
+        statusText.textContent = isLooping && allowLoop ? '🔊 Bol raha hai (Loop ON)...' : '🔊 Bol raha hai...';
       };
 
       utterance.onend = () => {
         orb.classList.remove('speaking');
+        if (isLooping && allowLoop && !isPaused) {
+          statusText.textContent = '🔁 Dobara shuru ho raha hai...';
+          setTimeout(() => speakText(currentText, true), 800);
+        } else {
+          statusText.textContent = '✅ Complete';
+        }
       };
 
       utterance.onerror = () => {
         orb.classList.remove('speaking');
+        statusText.textContent = 'Ready';
       };
 
       window.speechSynthesis.speak(utterance);
     }
 
-    // Preset Dialogues
-    function triggerAction(type) {
-      const scripts = {
-        intro: `Hello ${targetName}, main Aura AI hoon. Mujhe Utkarsh ne khas taur par aapke liye design kiya hai. System online hai, bataiye main aapki kya madad kar sakta hoon?`,
-        compliment: `${targetName}, mere data analysis ke hisaab se aapki smile aur aapka andaaz kaafi unique hai. Aap jab muskurati hain toh poora mahaul positive ho jaata hai.`,
-        shayari: `Suniye ${targetName}... hazaron chehron mein ek alag si baat hoti hai, kuch logon ki muskurahat hi sabse khaas hoti hai.`,
-        secret: `${targetName}, ek secret bataun? Utkarsh ne yeh poora system sirf isliye banaya hai taaki aapke chehre par ek chhoti si smile aa sake.`
-      };
-
-      speakHindi(scripts[type]);
+    function startReading() {
+      if (window.speechSynthesis.paused && isPaused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        orb.classList.add('speaking');
+        statusText.textContent = '🔊 Dobara bol raha hai...';
+        return;
+      }
+      speakText(notesArea.value, true);
     }
 
-    function speakCustom() {
-      const input = document.getElementById('customText');
-      const text = input.value.trim();
-      if (text) {
-        speakHindi(text);
-        input.value = '';
+    function togglePause() {
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isPaused = true;
+        orb.classList.remove('speaking');
+        statusText.textContent = '⏸️ Ruka hua hai (Play dabayein)';
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        orb.classList.add('speaking');
+        statusText.textContent = '🔊 Bol raha hai...';
       }
     }
 
-    // Modal Functions
+    function stopReading() {
+      isLooping = false;
+      loopBtn.textContent = '🔁 Loop: OFF';
+      loopBtn.classList.remove('active');
+      isPaused = false;
+      window.speechSynthesis.cancel();
+      orb.classList.remove('speaking');
+      statusText.textContent = '⏹️ Band kar diya gaya';
+    }
+
+    function playPreset(type) {
+      const presets = {
+        intro: `Hello ${targetName}, main aapka personal study AI hoon. Aap apne notes neeche box mein paste kijiye, main unhe bolkar sunaunga taaki aapko bina thake sab yaad ho jaye.`,
+        motivate: `${targetName}, bas thoda sa focus aur lagataar revision—aap koi bhi topic aasani se yaad kar sakti hain. Chaliye shuru karte hain!`,
+        compliment: `${targetName}, aapki mehnat aur dedication sach mein kamaal ki hai. Aap jab muskurati hain toh sab kuch aasan lagne lagta hai.`
+      };
+      speakText(presets[type], false);
+    }
+
+    function clearNotes() {
+      stopReading();
+      notesArea.value = '';
+      localStorage.removeItem('saved_study_notes');
+      statusText.textContent = '🗑️ Notes clear ho gaye';
+    }
+
     function openModal() {
       document.getElementById('nameModal').style.display = 'flex';
     }
@@ -469,10 +588,9 @@
         localStorage.setItem('ai_target_name', targetName);
       }
       document.getElementById('nameModal').style.display = 'none';
-      triggerAction('intro');
+      playPreset('intro');
     }
 
-    // Load voices properly on mobile Chrome
     window.speechSynthesis.onvoiceschanged = () => {
       window.speechSynthesis.getVoices();
     };
