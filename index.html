@@ -3,35 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AURA AI - Smart Voice & Study Assistant</title>
+  <title>AURA AI - Interactive Voice & Study Studio</title>
   <style>
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
     body {
-      background: radial-gradient(circle at center, #0a192f 0%, #020617 100%);
-      color: #e2e8f0;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(56, 189, 248, 0.16), transparent 40%),
+        radial-gradient(circle at 80% 75%, rgba(168, 85, 247, 0.16), transparent 45%),
+        radial-gradient(circle at center, #09152b 0%, #020617 100%);
+      color: #f1f5f9;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 16px;
       overflow-x: hidden;
+      position: relative;
     }
 
-    /* Top Header */
-    .header {
+    /* Subtle Ambient Grid / Glow */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+      background-size: 24px 24px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-container {
       width: 100%;
-      max-width: 520px;
+      max-width: 540px;
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Glass Header */
+    .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid rgba(56, 189, 248, 0.2);
-      padding-bottom: 10px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      border-radius: 16px;
+      padding: 10px 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
     }
 
     .status-badge {
@@ -39,10 +67,10 @@
       align-items: center;
       gap: 8px;
       font-size: 13px;
-      letter-spacing: 1.5px;
+      letter-spacing: 1.4px;
       color: #38bdf8;
       text-transform: uppercase;
-      font-weight: 600;
+      font-weight: 700;
     }
 
     .dot {
@@ -51,29 +79,47 @@
       background: #22c55e;
       border-radius: 50%;
       box-shadow: 0 0 10px #22c55e;
-      animation: blink 1.5s infinite;
+      animation: blink 1.6s infinite;
     }
 
-    .settings-btn {
-      background: rgba(56, 189, 248, 0.1);
-      border: 1px solid rgba(56, 189, 248, 0.4);
-      color: #38bdf8;
-      padding: 6px 12px;
-      border-radius: 8px;
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .glass-pill-btn {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      color: #e0f2fe;
+      padding: 6px 11px;
+      border-radius: 10px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
 
-    /* AI Orb Animation Container */
+    .glass-pill-btn:active {
+      transform: scale(0.96);
+    }
+
+    /* AI Orb Section */
+    .orb-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4px 0;
+    }
+
     .orb-container {
       position: relative;
-      width: 160px;
-      height: 160px;
+      width: 152px;
+      height: 152px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 12px 0;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .ring {
@@ -84,34 +130,34 @@
     }
 
     .ring-1 {
-      width: 155px;
-      height: 155px;
+      width: 148px;
+      height: 148px;
       border-top: 2px solid #38bdf8;
       border-bottom: 2px solid #38bdf8;
       animation: spin 8s linear infinite;
     }
 
     .ring-2 {
-      width: 126px;
-      height: 126px;
-      border-left: 2px solid #818cf8;
-      border-right: 2px solid #818cf8;
+      width: 120px;
+      height: 120px;
+      border-left: 2px solid #a855f7;
+      border-right: 2px solid #a855f7;
       animation: spinReverse 5s linear infinite;
     }
 
     .ring-3 {
-      width: 100px;
-      height: 100px;
+      width: 94px;
+      height: 94px;
       border: 1px dashed rgba(56, 189, 248, 0.6);
       animation: spin 12s linear infinite;
     }
 
     .core {
-      width: 74px;
-      height: 74px;
+      width: 70px;
+      height: 70px;
       border-radius: 50%;
-      background: radial-gradient(circle, #38bdf8 0%, #0284c7 60%, #0369a1 100%);
-      box-shadow: 0 0 25px rgba(56, 189, 248, 0.6), inset 0 0 15px #ffffff;
+      background: radial-gradient(circle at 30% 30%, #7dd3fc 0%, #0284c7 60%, #0369a1 100%);
+      box-shadow: 0 0 28px rgba(56, 189, 248, 0.65), inset 0 0 14px rgba(255, 255, 255, 0.8);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -119,27 +165,26 @@
     }
 
     .orb-container.speaking .core {
-      animation: pulseSpeak 0.35s ease-in-out infinite alternate;
-      box-shadow: 0 0 45px #38bdf8, 0 0 80px #818cf8, inset 0 0 20px #fff;
+      animation: pulseSpeak 0.34s ease-in-out infinite alternate;
+      box-shadow: 0 0 48px #38bdf8, 0 0 85px #a855f7, inset 0 0 22px #fff;
     }
 
     .orb-container.speaking .ring-1 {
-      animation: spin 1.8s linear infinite;
+      animation: spin 1.7s linear infinite;
       border-color: #22d3ee transparent;
     }
 
     .orb-container.speaking .ring-2 {
       animation: spinReverse 1.2s linear infinite;
-      border-color: transparent #a855f7;
+      border-color: transparent #c084fc;
     }
 
     .orb-container.listening .core {
-      background: radial-gradient(circle, #ef4444 0%, #b91c1c 80%);
-      box-shadow: 0 0 40px rgba(239, 68, 68, 0.8);
-      animation: pulseSpeak 0.5s ease-in-out infinite alternate;
+      background: radial-gradient(circle, #f87171 0%, #dc2626 75%, #991b1b 100%);
+      box-shadow: 0 0 42px rgba(239, 68, 68, 0.85);
+      animation: pulseSpeak 0.45s ease-in-out infinite alternate;
     }
 
-    /* Equalizer Bars */
     .equalizer {
       display: flex;
       align-items: center;
@@ -151,7 +196,7 @@
       width: 4px;
       height: 6px;
       background: #ffffff;
-      border-radius: 2px;
+      border-radius: 3px;
     }
 
     .orb-container.speaking .bar:nth-child(1) { animation: eq 0.4s infinite alternate 0.1s; }
@@ -160,45 +205,83 @@
     .orb-container.speaking .bar:nth-child(4) { animation: eq 0.35s infinite alternate 0.2s; }
     .orb-container.speaking .bar:nth-child(5) { animation: eq 0.45s infinite alternate 0.4s; }
 
-    /* Live Status Text */
     .status-line {
-      font-size: 13px;
-      color: #7dd3fc;
-      margin-bottom: 10px;
-      min-height: 20px;
+      font-size: 12.5px;
+      color: #93c5fd;
+      margin-top: 8px;
+      min-height: 18px;
       text-align: center;
+      letter-spacing: 0.2px;
     }
 
-    /* Quick Preset Buttons */
+    /* Live Highlight Spotlight Box */
+    .spotlight-box {
+      background: rgba(15, 23, 42, 0.72);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 14px;
+      padding: 12px 14px;
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.45;
+      color: #e2e8f0;
+      transition: all 0.25s ease;
+    }
+
+    .spotlight-box.active-line {
+      border-color: #38bdf8;
+      background: rgba(14, 165, 233, 0.14);
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.22);
+      color: #ffffff;
+      transform: scale(1.01);
+    }
+
+    /* Quick Presets */
     .quick-presets {
-      width: 100%;
-      max-width: 520px;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
-      margin-bottom: 12px;
     }
 
     .preset-btn {
-      background: rgba(14, 165, 233, 0.15);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      color: #e0f2fe;
-      padding: 8px 6px;
-      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      color: #e2e8f0;
+      padding: 9px 6px;
+      border-radius: 11px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
+      transition: all 0.2s ease;
     }
 
-    /* Study Reader Card */
+    .preset-btn:hover {
+      border-color: rgba(56, 189, 248, 0.5);
+      background: rgba(56, 189, 248, 0.14);
+    }
+
+    .preset-btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Glass Studio Card */
     .study-card {
-      width: 100%;
-      max-width: 520px;
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(56, 189, 248, 0.35);
-      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.68);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 18px;
       padding: 14px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .card-top {
@@ -206,22 +289,23 @@
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 8px;
-      font-size: 13px;
-      color: #94a3b8;
+      flex-wrap: wrap;
+      font-size: 12.5px;
+      color: #cbd5e1;
     }
 
     .top-actions {
       display: flex;
       gap: 6px;
+      flex-wrap: wrap;
     }
 
     .mic-btn {
-      background: rgba(16, 185, 129, 0.18);
-      border: 1px solid rgba(16, 185, 129, 0.6);
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.55);
       color: #6ee7b7;
-      padding: 4px 10px;
-      border-radius: 6px;
+      padding: 5px 10px;
+      border-radius: 8px;
       font-size: 12px;
       font-weight: 600;
       cursor: pointer;
@@ -234,107 +318,149 @@
       animation: blink 1s infinite;
     }
 
+    .save-topic-btn {
+      background: rgba(168, 85, 247, 0.18);
+      border: 1px solid rgba(192, 132, 252, 0.55);
+      color: #e9d5ff;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .clear-btn {
-      background: transparent;
-      border: 1px solid rgba(248, 113, 113, 0.4);
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(248, 113, 113, 0.35);
       color: #fca5a5;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 5px 9px;
+      border-radius: 8px;
+      font-size: 11.5px;
       cursor: pointer;
     }
 
     textarea {
       width: 100%;
-      height: 145px;
-      background: #020617;
-      border: 1px solid rgba(56, 189, 248, 0.3);
-      border-radius: 10px;
+      height: 128px;
+      background: rgba(2, 6, 23, 0.78);
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      border-radius: 12px;
       padding: 12px;
       color: #f8fafc;
-      font-size: 15px;
+      font-size: 14.5px;
       line-height: 1.5;
       resize: vertical;
       outline: none;
-      margin-bottom: 12px;
     }
 
     textarea:focus {
       border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.15);
     }
 
-    /* Speed & Loop Bar */
+    /* Saved Topics Chips */
+    .playlist-area {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 76px;
+      overflow-y: auto;
+    }
+
+    .topic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: #e2e8f0;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .topic-chip:hover {
+      border-color: #38bdf8;
+      background: rgba(14, 165, 233, 0.2);
+    }
+
+    .topic-del {
+      color: #f87171;
+      font-weight: bold;
+      font-size: 13px;
+      line-height: 1;
+      padding-left: 2px;
+    }
+
+    /* Options Bar: Speed, Tone & Loop */
     .options-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
-      margin-bottom: 12px;
       flex-wrap: wrap;
     }
 
-    .speed-group {
+    .group-row {
       display: flex;
       align-items: center;
       gap: 5px;
       font-size: 12px;
       color: #cbd5e1;
+      flex-wrap: wrap;
     }
 
-    .speed-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
+    .mini-btn {
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.25);
       color: #cbd5e1;
       padding: 5px 9px;
-      border-radius: 6px;
-      font-size: 12px;
+      border-radius: 7px;
+      font-size: 11.5px;
       cursor: pointer;
+      font-weight: 600;
     }
 
-    .speed-btn.active {
+    .mini-btn.active {
       background: #0284c7;
       border-color: #38bdf8;
       color: #fff;
-      font-weight: bold;
-    }
-
-    .loop-btn {
-      background: #1e293b;
-      border: 1px solid #334155;
-      color: #cbd5e1;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
     }
 
     .loop-btn.active {
       background: rgba(34, 197, 94, 0.2);
       border-color: #22c55e;
       color: #4ade80;
-      font-weight: bold;
     }
 
-    /* Main Playback Controls */
+    /* Playback Controls */
     .playback-controls {
       display: grid;
       grid-template-columns: 2fr 1fr 1fr;
       gap: 8px;
+      margin-top: 2px;
     }
 
     .ctrl-btn {
       padding: 12px;
       border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
+      border-radius: 11px;
+      font-size: 13.5px;
+      font-weight: 700;
       cursor: pointer;
       color: #fff;
+      transition: transform 0.15s ease;
+    }
+
+    .ctrl-btn:active {
+      transform: scale(0.97);
     }
 
     .play-btn {
       background: linear-gradient(135deg, #0284c7, #2563eb);
-      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
     }
 
     .pause-btn {
@@ -350,7 +476,8 @@
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.85);
+      background: rgba(2, 6, 23, 0.82);
+      backdrop-filter: blur(6px);
       align-items: center;
       justify-content: center;
       z-index: 100;
@@ -359,8 +486,8 @@
 
     .modal-content {
       background: #0f172a;
-      border: 1px solid #38bdf8;
-      border-radius: 14px;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 16px;
       padding: 20px;
       width: 100%;
       max-width: 350px;
@@ -375,7 +502,7 @@
     .modal-content input {
       width: 100%;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 9px;
       border: 1px solid #334155;
       background: #1e293b;
       color: #fff;
@@ -388,7 +515,7 @@
       color: #fff;
       border: none;
       padding: 10px;
-      border-radius: 8px;
+      border-radius: 9px;
       font-weight: bold;
       cursor: pointer;
       width: 100%;
@@ -397,75 +524,90 @@
     @keyframes spin { 100% { transform: rotate(360deg); } }
     @keyframes spinReverse { 100% { transform: rotate(-360deg); } }
     @keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
-    @keyframes pulseSpeak { 0% { transform: scale(0.95); } 100% { transform: scale(1.12); } }
+    @keyframes pulseSpeak { 0% { transform: scale(0.95); } 100% { transform: scale(1.13); } }
     @keyframes eq { 0% { height: 6px; } 100% { height: 22px; } }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="status-badge">
-      <div class="dot"></div>
-      <span>AURA STUDY AI</span>
-    </div>
-    <button class="settings-btn" onclick="openModal()">⚙️ Name Set</button>
-  </div>
-
-  <!-- AI Orb -->
-  <div class="orb-container" id="orb" onclick="playPreset('intro')">
-    <div class="ring ring-1"></div>
-    <div class="ring ring-2"></div>
-    <div class="ring ring-3"></div>
-    <div class="core">
-      <div class="equalizer">
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
-        <div class="bar"></div>
+  <div class="app-container">
+    <!-- Header -->
+    <div class="header">
+      <div class="status-badge">
+        <div class="dot"></div>
+        <span>AURA STUDIO AI</span>
       </div>
-    </div>
-  </div>
-
-  <div class="status-line" id="statusText">Ready • Bolkar likhein, paste karein ya orb touch karein</div>
-
-  <!-- Quick Fun / Intro Presets -->
-  <div class="quick-presets">
-    <button class="preset-btn" onclick="playPreset('intro')">👋 Intro</button>
-    <button class="preset-btn" onclick="playPreset('motivate')">🔥 Study Boost</button>
-    <button class="preset-btn" onclick="playPreset('compliment')">✨ Special</button>
-  </div>
-
-  <!-- Audio Study Reader Card -->
-  <div class="study-card">
-    <div class="card-top">
-      <span>📖 Topic bolein ya paste karein:</span>
-      <div class="top-actions">
-        <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Bolkar Likho</button>
-        <button class="clear-btn" onclick="clearNotes()">Clear</button>
+      <div class="header-actions">
+        <button class="glass-pill-btn" id="toneBtn" onclick="toggleTone()">Tone: Soft</button>
+        <button class="glass-pill-btn" onclick="openModal()">⚙️ Name</button>
       </div>
     </div>
 
-    <textarea id="studyNotes" placeholder="Bolkar likhne ke liye 'Bolkar Likho' dabayein, ya apne notes paste karein..."></textarea>
-
-    <!-- Speed & Loop Options -->
-    <div class="options-bar">
-      <div class="speed-group">
-        <span>Speed:</span>
-        <button class="speed-btn" onclick="setSpeed(0.75, this)">0.75x</button>
-        <button class="speed-btn active" onclick="setSpeed(0.95, this)">1x</button>
-        <button class="speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+    <!-- AI Orb -->
+    <div class="orb-section">
+      <div class="orb-container" id="orb" onclick="playPreset('intro')">
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
+        <div class="core">
+          <div class="equalizer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+        </div>
       </div>
-      <button class="loop-btn" id="loopBtn" onclick="toggleLoop()">🔁 Loop: OFF</button>
+      <div class="status-line" id="statusText">Ready • Bolkar likhein, paste karein ya topic chunein</div>
     </div>
 
-    <!-- Play / Pause / Stop Buttons -->
-    <div class="playback-controls">
-      <button class="ctrl-btn play-btn" onclick="startReading()">▶️ Suno (Play)</button>
-      <button class="ctrl-btn pause-btn" onclick="togglePause()">⏸️ Pause</button>
-      <button class="ctrl-btn stop-btn" onclick="stopReading()">⏹️ Stop</button>
+    <!-- Live Sentence Spotlight -->
+    <div class="spotlight-box" id="spotlightBox">
+      ✨ Jo line abhi AI bolega, woh yahan highlight hokar dikhegi...
+    </div>
+
+    <!-- Quick Presets -->
+    <div class="quick-presets">
+      <button class="preset-btn" onclick="playPreset('intro')">👋 Intro</button>
+      <button class="preset-btn" onclick="playPreset('motivate')">🔥 Focus Boost</button>
+      <button class="preset-btn" onclick="playPreset('compliment')">✨ Special</button>
+    </div>
+
+    <!-- Main Study Card -->
+    <div class="study-card">
+      <div class="card-top">
+        <span>📖 Study / Voice Notes</span>
+        <div class="top-actions">
+          <button class="mic-btn" id="micBtn" onclick="toggleVoiceInput()">🎙️ Bolkar Likho</button>
+          <button class="save-topic-btn" onclick="saveCurrentTopic()">💾 Save Topic</button>
+          <button class="clear-btn" onclick="clearNotes()">Clear</button>
+        </div>
+      </div>
+
+      <textarea id="studyNotes" placeholder="Bolkar likhne ke liye 'Bolkar Likho' dabayein, ya apne notes paste karein..."></textarea>
+
+      <!-- Saved Topics Playlist -->
+      <div class="playlist-area" id="playlistArea"></div>
+
+      <!-- Speed & Loop Options -->
+      <div class="options-bar">
+        <div class="group-row">
+          <span>Speed:</span>
+          <button class="mini-btn speed-btn" onclick="setSpeed(0.75, this)">0.75x</button>
+          <button class="mini-btn speed-btn active" onclick="setSpeed(0.95, this)">1x</button>
+          <button class="mini-btn speed-btn" onclick="setSpeed(1.2, this)">1.2x</button>
+        </div>
+        <button class="mini-btn loop-btn" id="loopBtn" onclick="toggleLoop()">🔁 Loop: OFF</button>
+      </div>
+
+      <!-- Playback Controls -->
+      <div class="playback-controls">
+        <button class="ctrl-btn play-btn" onclick="startReading()">▶️ Suno (Play)</button>
+        <button class="ctrl-btn pause-btn" onclick="togglePause()">⏸️ Pause</button>
+        <button class="ctrl-btn stop-btn" onclick="stopReading()">⏹️ Stop</button>
+      </div>
     </div>
   </div>
 
@@ -485,22 +627,262 @@
     const notesArea = document.getElementById('studyNotes');
     const orb = document.getElementById('orb');
     const statusText = document.getElementById('statusText');
+    const spotlightBox = document.getElementById('spotlightBox');
     const loopBtn = document.getElementById('loopBtn');
     const micBtn = document.getElementById('micBtn');
+    const toneBtn = document.getElementById('toneBtn');
+    const playlistArea = document.getElementById('playlistArea');
 
     let speechRate = 0.95;
+    let voicePitch = 1.08; // Soft default
+    let isSoftTone = true;
     let isLooping = false;
     let isPaused = false;
     let isListening = false;
-    let currentText = '';
+    let isPlayingSequence = false;
+    let wakeLock = null;
 
-    // Load saved notes automatically
+    // Load saved notes & topics
     notesArea.value = localStorage.getItem('saved_study_notes') || '';
     notesArea.addEventListener('input', () => {
       localStorage.setItem('saved_study_notes', notesArea.value);
     });
 
-    // Speech-to-Text Setup
+    let savedTopics = JSON.parse(localStorage.getItem('aura_saved_topics') || '[]');
+    renderTopics();
+
+    function haptic(ms = 22) {
+      if (navigator.vibrate) {
+        try { navigator.vibrate(ms); } catch (e) {}
+      }
+    }
+
+    // Screen Wake Lock (keeps screen awake while speaking)
+    async function requestWakeLock() {
+      if ('wakeLock' in navigator) {
+        try {
+          wakeLock = await navigator.wakeLock.request('screen');
+        } catch (err) {}
+      }
+    }
+
+    async function releaseWakeLock() {
+      if (wakeLock) {
+        try {
+          await wakeLock.release();
+          wakeLock = null;
+        } catch (err) {}
+      }
+    }
+
+    function toggleTone() {
+      haptic(18);
+      isSoftTone = !isSoftTone;
+      voicePitch = isSoftTone ? 1.08 : 0.85;
+      toneBtn.textContent = isSoftTone ? 'Tone: Soft' : 'Tone: Deep';
+    }
+
+    function setSpeed(rate, btn) {
+      haptic(18);
+      speechRate = rate;
+      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function toggleLoop() {
+      haptic(20);
+      isLooping = !isLooping;
+      loopBtn.textContent = isLooping ? '🔁 Loop: ON' : '🔁 Loop: OFF';
+      loopBtn.classList.toggle('active', isLooping);
+    }
+
+    // Topic Playlist Management
+    function saveCurrentTopic() {
+      haptic(25);
+      const text = notesArea.value.trim();
+      if (!text) {
+        statusText.textContent = '⚠️ Pehle kuch likhein ya bolein, phir Save Topic dabayein.';
+        return;
+      }
+      const title = text.split(/\s+/).slice(0, 3).join(' ') + (text.split(/\s+/).length > 3 ? '...' : '');
+      savedTopics.unshift({ id: Date.now(), title, text });
+      savedTopics = savedTopics.slice(0, 10);
+      localStorage.setItem('aura_saved_topics', JSON.stringify(savedTopics));
+      renderTopics();
+      statusText.textContent = `💾 Topic "${title}" save ho gaya!`;
+    }
+
+    function renderTopics() {
+      playlistArea.innerHTML = '';
+      savedTopics.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'topic-chip';
+        chip.innerHTML = `<span>📌 ${item.title}</span><span class="topic-del" title="Delete">×</span>`;
+
+        chip.querySelector('span:first-child').onclick = () => {
+          haptic(20);
+          notesArea.value = item.text;
+          localStorage.setItem('saved_study_notes', item.text);
+          statusText.textContent = `📌 Loaded: "${item.title}"`;
+        };
+
+        chip.querySelector('.topic-del').onclick = (e) => {
+          e.stopPropagation();
+          haptic(20);
+          savedTopics = savedTopics.filter(t => t.id !== item.id);
+          localStorage.setItem('aura_saved_topics', JSON.stringify(savedTopics));
+          renderTopics();
+        };
+
+        playlistArea.appendChild(chip);
+      });
+    }
+
+    // Split text into clean sentences for live spotlight
+    function splitIntoSentences(text) {
+      const parts = text
+        .replace(/\n+/g, '. ')
+        .match(/[^.!?।]+[.!?।]?/g);
+      return (parts || [text]).map(s => s.trim()).filter(Boolean);
+    }
+
+    function speakSentenceBySentence(sentences, index = 0, allowLoop = false) {
+      if (!isPlayingSequence || index >= sentences.length) {
+        if (isPlayingSequence && allowLoop && isLooping && !isPaused) {
+          statusText.textContent = '🔁 Dobara shuru ho raha hai...';
+          setTimeout(() => {
+            if (isPlayingSequence && !isPaused) {
+              speakSentenceBySentence(sentences, 0, true);
+            }
+          }, 700);
+        } else {
+          finishPlayback('✅ Complete');
+        }
+        return;
+      }
+
+      const line = sentences[index];
+      spotlightBox.textContent = `“${line}”`;
+      spotlightBox.classList.add('active-line');
+      orb.classList.add('speaking');
+      statusText.textContent = isLooping && allowLoop
+        ? `🔊 Bol raha hai (${index + 1}/${sentences.length}) • Loop ON`
+        : `🔊 Bol raha hai (${index + 1}/${sentences.length})...`;
+
+      const utterance = new SpeechSynthesisUtterance(line);
+      utterance.lang = 'hi-IN';
+      utterance.rate = speechRate;
+      utterance.pitch = voicePitch;
+
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.lang.includes('hi'));
+      if (hindiVoice) utterance.voice = hindiVoice;
+
+      utterance.onend = () => {
+        if (!isPlayingSequence) return;
+        if (isPaused) return;
+        speakSentenceBySentence(sentences, index + 1, allowLoop);
+      };
+
+      utterance.onerror = () => {
+        if (!isPlayingSequence) return;
+        speakSentenceBySentence(sentences, index + 1, allowLoop);
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function finishPlayback(msg) {
+      isPlayingSequence = false;
+      isPaused = false;
+      orb.classList.remove('speaking');
+      spotlightBox.classList.remove('active-line');
+      statusText.textContent = msg;
+      releaseWakeLock();
+    }
+
+    function startReading() {
+      haptic(25);
+      if (isListening && recognition) {
+        recognition.stop();
+      }
+
+      if (window.speechSynthesis.paused && isPaused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        isPlayingSequence = true;
+        orb.classList.add('speaking');
+        spotlightBox.classList.add('active-line');
+        statusText.textContent = '🔊 Dobara bol raha hai...';
+        requestWakeLock();
+        return;
+      }
+
+      const rawText = notesArea.value.trim();
+      if (!rawText) {
+        statusText.textContent = '⚠️ Pehle bolkar likhein ya box mein kuch paste karein!';
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      isPaused = false;
+      isPlayingSequence = true;
+      requestWakeLock();
+
+      const sentences = splitIntoSentences(rawText);
+      speakSentenceBySentence(sentences, 0, true);
+    }
+
+    function togglePause() {
+      haptic(18);
+      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+        window.speechSynthesis.pause();
+        isPaused = true;
+        orb.classList.remove('speaking');
+        statusText.textContent = '⏸️ Ruka hua hai (Play dabayein)';
+        releaseWakeLock();
+      } else if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        isPaused = false;
+        isPlayingSequence = true;
+        orb.classList.add('speaking');
+        statusText.textContent = '🔊 Bol raha hai...';
+        requestWakeLock();
+      }
+    }
+
+    function stopReading() {
+      haptic(22);
+      if (isListening && recognition) {
+        recognition.stop();
+      }
+      isLooping = false;
+      loopBtn.textContent = '🔁 Loop: OFF';
+      loopBtn.classList.remove('active');
+      window.speechSynthesis.cancel();
+      spotlightBox.textContent = '✨ Jo line abhi AI bolega, woh yahan highlight hokar dikhegi...';
+      finishPlayback('⏹️ Band kar diya gaya');
+    }
+
+    function playPreset(type) {
+      haptic(25);
+      if (isListening && recognition) recognition.stop();
+      window.speechSynthesis.cancel();
+      isPaused = false;
+      isPlayingSequence = true;
+      requestWakeLock();
+
+      const presets = {
+        intro: `Hello ${targetName}, main aapka personal study AI hoon. Aap bolkar topic likhwa sakti hain ya neeche paste kar sakti hain, main use bolkar sunaunga.`,
+        motivate: `${targetName}, thoda sa focus aur lagataar revision—aap koi bhi topic aasani se yaad kar sakti hain. Chaliye shuru karte hain!`,
+        compliment: `${targetName}, aapki mehnat aur andaaz sach mein kamaal ka hai. Aap jab muskurati hain toh sab kuch aasan lagne lagta hai.`
+      };
+
+      const sentences = splitIntoSentences(presets[type]);
+      speakSentenceBySentence(sentences, 0, false);
+    }
+
+    // Speech-to-Text
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition = null;
 
@@ -513,7 +895,9 @@
       recognition.onstart = () => {
         isListening = true;
         window.speechSynthesis.cancel();
+        isPlayingSequence = false;
         orb.classList.remove('speaking');
+        spotlightBox.classList.remove('active-line');
         orb.classList.add('listening');
         micBtn.classList.add('recording');
         micBtn.textContent = '🛑 Sun raha hoon...';
@@ -526,7 +910,8 @@
           const existing = notesArea.value.trim();
           notesArea.value = existing ? `${existing} ${spokenText}` : spokenText;
           localStorage.setItem('saved_study_notes', notesArea.value);
-          statusText.textContent = '💾 Save ho gaya! Ab Suno (Play) dabayein ya aur bolein.';
+          spotlightBox.textContent = `🎙️ Captured: “${spokenText}”`;
+          statusText.textContent = '💾 Save ho gaya! Ab Suno (Play) dabayein ya Save Topic karein.';
         }
       };
 
@@ -543,11 +928,11 @@
     }
 
     function toggleVoiceInput() {
+      haptic(25);
       if (!recognition) {
         statusText.textContent = '⚠️ Is browser mein voice typing support nahi hai. Chrome try karein.';
         return;
       }
-
       if (isListening) {
         recognition.stop();
       } else {
@@ -559,113 +944,8 @@
       }
     }
 
-    function setSpeed(rate, btn) {
-      speechRate = rate;
-      document.querySelectorAll('.speed-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    }
-
-    function toggleLoop() {
-      isLooping = !isLooping;
-      loopBtn.textContent = isLooping ? '🔁 Loop: ON' : '🔁 Loop: OFF';
-      loopBtn.classList.toggle('active', isLooping);
-    }
-
-    function speakText(text, allowLoop = false) {
-      if (!text.trim()) {
-        statusText.textContent = '⚠️ Pehle bolkar likhein ya box mein kuch paste karein!';
-        return;
-      }
-
-      window.speechSynthesis.cancel();
-      isPaused = false;
-      currentText = text;
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'hi-IN';
-      utterance.rate = speechRate;
-      utterance.pitch = 1.03;
-
-      const voices = window.speechSynthesis.getVoices();
-      const hindiVoice = voices.find(v => v.lang.includes('hi-IN') || v.lang.includes('hi'));
-      if (hindiVoice) {
-        utterance.voice = hindiVoice;
-      }
-
-      utterance.onstart = () => {
-        orb.classList.add('speaking');
-        statusText.textContent = isLooping && allowLoop ? '🔊 Bol raha hai (Loop ON)...' : '🔊 Bol raha hai...';
-      };
-
-      utterance.onend = () => {
-        orb.classList.remove('speaking');
-        if (isLooping && allowLoop && !isPaused) {
-          statusText.textContent = '🔁 Dobara shuru ho raha hai...';
-          setTimeout(() => speakText(currentText, true), 800);
-        } else {
-          statusText.textContent = '✅ Complete';
-        }
-      };
-
-      utterance.onerror = () => {
-        orb.classList.remove('speaking');
-        statusText.textContent = 'Ready';
-      };
-
-      window.speechSynthesis.speak(utterance);
-    }
-
-    function startReading() {
-      if (isListening && recognition) {
-        recognition.stop();
-      }
-      if (window.speechSynthesis.paused && isPaused) {
-        window.speechSynthesis.resume();
-        isPaused = false;
-        orb.classList.add('speaking');
-        statusText.textContent = '🔊 Dobara bol raha hai...';
-        return;
-      }
-      speakText(notesArea.value, true);
-    }
-
-    function togglePause() {
-      if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
-        window.speechSynthesis.pause();
-        isPaused = true;
-        orb.classList.remove('speaking');
-        statusText.textContent = '⏸️ Ruka hua hai (Play dabayein)';
-      } else if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        isPaused = false;
-        orb.classList.add('speaking');
-        statusText.textContent = '🔊 Bol raha hai...';
-      }
-    }
-
-    function stopReading() {
-      if (isListening && recognition) {
-        recognition.stop();
-      }
-      isLooping = false;
-      loopBtn.textContent = '🔁 Loop: OFF';
-      loopBtn.classList.remove('active');
-      isPaused = false;
-      window.speechSynthesis.cancel();
-      orb.classList.remove('speaking');
-      statusText.textContent = '⏹️ Band kar diya gaya';
-    }
-
-    function playPreset(type) {
-      const presets = {
-        intro: `Hello ${targetName}, main aapka personal study AI hoon. Aap bolkar apna topic likhwa sakti hain ya neeche paste kar sakti hain, main use bolkar sunaunga.`,
-        motivate: `${targetName}, bas thoda sa focus aur lagataar revision—aap koi bhi topic aasani se yaad kar sakti hain. Chaliye shuru karte hain!`,
-        compliment: `${targetName}, aapki mehnat aur dedication sach mein kamaal ki hai. Aap jab muskurati hain toh sab kuch aasan lagne lagta hai.`
-      };
-      speakText(presets[type], false);
-    }
-
     function clearNotes() {
+      haptic(20);
       stopReading();
       notesArea.value = '';
       localStorage.removeItem('saved_study_notes');
@@ -673,10 +953,12 @@
     }
 
     function openModal() {
+      haptic(18);
       document.getElementById('nameModal').style.display = 'flex';
     }
 
     function saveName() {
+      haptic(22);
       const val = document.getElementById('targetNameInput').value.trim();
       if (val) {
         targetName = val;
